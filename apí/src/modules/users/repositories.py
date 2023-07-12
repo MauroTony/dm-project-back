@@ -9,7 +9,7 @@ class UserRepository:
         if user_verify:
             raise UserAlreadyExists('Username already exists')
         user.password = crypt_password(user.password)
-        database.users.insert_one({'username': user.username, 'password': user.password})
+        database.users.insert_one(user.model_dump())
 
     def find_by_username(self, username):
         user = database.users.find_one({'username': username})

@@ -2,11 +2,14 @@ from flask import request
 from flask_restful import Resource
 from flask_pydantic import validate
 from flask_jwt_extended import jwt_required, get_jwt_identity
+
 from .ext import UserAlreadyExists, UserNotFound
 from .models import User
 from .repositories import UserRepository
 from .schema import UserSchema, UserDeleteSchema
+
 class UserResource(Resource):
+
     @jwt_required()
     def get(self, username):
         user = UserRepository().find_by_username(username)
@@ -19,8 +22,11 @@ class UserResource(Resource):
         data = request.get_json()
         username = data.get('username')
         password = data.get('password')
+        renda = data.get('renda')
+        name = data.get('name')
+
         try:
-            new_user = User(username=username, password=password)
+            new_user = User(username=username, password=password, renda=renda, name=name)
             UserRepository().create(new_user)
         except UserAlreadyExists:
             return {'message': 'Username already exists'}, 400
@@ -40,7 +46,6 @@ class UserResource(Resource):
         except UserNotFound:
             return {'message': 'User not found'}, 404
         return {'message': 'User updated successfully'}
-
 
     @jwt_required()
     @validate(UserDeleteSchema)
