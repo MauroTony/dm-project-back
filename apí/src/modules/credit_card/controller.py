@@ -3,9 +3,9 @@ from flask_restful import Resource
 from flask_pydantic import validate
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
-from .ext import CreditCardNotFound, CreditCardAlreadyExists, AnaliseCreditCardNotFound, AnaliseApproved, AnaliseCooldown, AnalisePending
+from .ext import CreditCardNotFound, CreditCardAlreadyExists, AnaliseNotPending, AnaliseCreditCardNotFound, AnaliseApproved, AnaliseCooldown, AnalisePending
 from .models import CreditCard, CreditCardAnalise
-from .repositories import CreditCardRepository, AnaliseCreditCardRepository
+from .repositories import CreditCardRepository, AnaliseCreditCardRepository, AnaliseCreditCardLogsRepository
 from .schema import AnaliseSchema
 class CardResource(Resource):
 
@@ -70,3 +70,25 @@ class AnaliseResource(Resource):
             return {'message': 'Credit Card not found'}, 404
 
         return credit_card.model_dump(), 201
+
+    @jwt_required()
+    def delete(self):
+        current_user = get_jwt_identity()
+        try:
+            credit_card = AnaliseCreditCardRepository().delete(current_user)
+        except AnaliseCreditCardNotFound:
+            return {'message': 'Credit review not found'}, 404
+        except AnaliseNotPending:
+            return {'message': 'Credit review is not pending'}, 400
+        return {'message': 'Credit review deleted successfully'}, 200
+
+class AnaliseListResource(Resource):
+
+    @jwt_required()
+    def get(self):
+        current_user = get_jwt_identity()
+        try:
+            credit_card = AnaliseCreditCardLogsRepository().get_logs(current_user)
+            return credit_card, 200
+        except AnaliseCreditCardNotFound:
+            return {'message': 'Credit review not found'}, 404

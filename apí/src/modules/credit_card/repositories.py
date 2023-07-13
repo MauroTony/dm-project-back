@@ -5,7 +5,7 @@ import json
 from main import database
 from libs.rabbitmq.rabbitmq import RabbitMQProducer
 from .models import CreditCard, CreditCardAnalise, CreditCardAnaliseLogs
-from .ext import CreditCardAlreadyExists, CreditCardNotFound, AnaliseCreditCardNotFound, AnaliseCooldown, AnaliseApproved, AnalisePending
+from .ext import CreditCardAlreadyExists, AnaliseNotPending, CreditCardNotFound, AnaliseCreditCardNotFound, AnaliseCooldown, AnaliseApproved, AnalisePending
 
 
 class CreditCardRepository:
@@ -100,7 +100,39 @@ class AnaliseCreditCardRepository:
         return analise_credit_card
 
     def get_analise_by_username(self, username):
-        analise_credit_card = database.credit_card_analise.find_one({'username': username})
+        card_user = CreditCardRepository().get_credit_card_by_username(username)
+
+        analise_credit_card = database.credit_card_analise.find_one({'username': username, 'card_number': card_user["number"]})
         if not analise_credit_card:
             raise AnaliseCreditCardNotFound('AnaliseCreditCard not found')
         return analise_credit_card
+
+    def delete(self, username):
+        card_user = CreditCardRepository().get_credit_card_by_username(username)
+        analise_credit_card_verify = database.credit_card_analise.find_one({'card_number': card_user["number"]})
+        if analise_credit_card_verify:
+            status = analise_credit_card_verify['status']
+            if status == 'pendente':
+                database.credit_card_analise.delete_one({'card_number': card_user["number"]})
+                return True
+            else:
+                raise AnaliseNotPending('AnaliseNotPending')
+        else:
+            raise AnaliseCreditCardNotFound('AnaliseCreditCard not found')
+
+class AnaliseCreditCardLogsRepository:
+
+    def get_logs(self, username):
+        logs = database.credit_card_analise_log.find({'username': username})
+        logs = list(logs)
+        print("logs", logs)
+
+        if not logs:
+            return []
+        for log in logs:
+            log.pop('_id', None)
+            print(log['date_request'])
+            log["score"] = str(log["score"])
+            log['date_request'] = datetime.fromtimestamp(log['date_request']).strftime('%Y-%m-%d %H:%M:%S')
+
+        return logs

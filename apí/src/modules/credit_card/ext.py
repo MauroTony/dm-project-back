@@ -27,3 +27,8 @@ class AnalisePending(Exception):
     '''
     AnalisePending
     '''
+
+class AnaliseNotPending(Exception):
+    '''
+    AnaliseNotPending
+    '''
