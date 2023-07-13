@@ -22,6 +22,11 @@ Features:
 - Modulo de Cartão de Credito
 - Modulo de analise de Credito como Microsserviço
 - Front-End em flutter
+
+Structure:
+- api -> Flask RestApi
+- dm-flutter -> Front-end em Flutter
+- score-calculation -> Microsserviço
   
  ## Summary 
 - [Docker Installation](#docker-installation) 
