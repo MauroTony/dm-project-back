@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  dm_score:
+    build: .
+    command: sh entrypoint.sh
+    env_file:
+      - .env
+    networks:
+      - dm_network
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: 'rabbitmq'
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+    ports:
+      - ${RABBITMQ_PORT}:5672
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - dm_network
+
+volumes:
+  rabbitmq-data:
+
+networks:
+  dm_network:
+    external: true
