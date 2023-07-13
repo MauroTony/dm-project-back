@@ -1,6 +1,13 @@
 version: "3.8"
 
 services:
+  dm_score:
+    build: .
+    command: sh entrypoint.sh
+    env_file:
+      - .env
+    networks:
+      - dm_network
   rabbitmq:
     image: rabbitmq:3-management
     container_name: 'rabbitmq'
@@ -16,12 +23,11 @@ services:
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
-      - rabbitmq-network
+      - dm_network
 
 volumes:
   rabbitmq-data:
 
 networks:
-  rabbitmq-network:
+  dm_network:
     external: true
-    driver: bridge
