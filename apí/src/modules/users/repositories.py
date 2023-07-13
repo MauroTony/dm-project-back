@@ -13,7 +13,6 @@ class UserRepository:
 
     def find_by_username(self, username):
         user = database.users.find_one({'username': username})
-        print("user", user)
         if not user:
             raise UserNotFound('User not found')
         return user

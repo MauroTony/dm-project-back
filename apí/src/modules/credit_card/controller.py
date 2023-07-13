@@ -4,8 +4,9 @@ from flask_pydantic import validate
 from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from .ext import CreditCardNotFound, CreditCardAlreadyExists, AnaliseCreditCardNotFound, AnaliseApproved, AnaliseCooldown, AnalisePending
-from .models import CreditCard
+from .models import CreditCard, CreditCardAnalise
 from .repositories import CreditCardRepository, AnaliseCreditCardRepository
+from .schema import AnaliseSchema
 class CardResource(Resource):
 
     @jwt_required()
@@ -15,7 +16,7 @@ class CardResource(Resource):
             credit_card = CreditCardRepository().get_credit_card_by_username(current_user)
         except CreditCardNotFound:
             return {'message': 'CreditCard not found'}, 404
-        return credit_card.model_dump(), 200
+        return credit_card, 200
 
     @jwt_required()
     def post(self):
@@ -47,7 +48,11 @@ class AnaliseResource(Resource):
             credit_card = AnaliseCreditCardRepository().get_analise_by_username(current_user)
         except AnaliseCreditCardNotFound:
             return {'message': 'Credit review not found'}, 404
-        return credit_card.model_dump(), 200
+        return AnaliseSchema(
+            status=credit_card["status"],
+            score=credit_card["score"],
+            card_number=credit_card["card_number"],
+            data_request=int(credit_card["data_request"])).model_dump(), 200
 
     @jwt_required()
     def post(self):

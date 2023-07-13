@@ -1,9 +1,12 @@
+import random
 from datetime import datetime
-
+import pika as broker
+import json
 from main import database
+from libs.rabbitmq.rabbitmq import RabbitMQProducer
 from .models import CreditCard, CreditCardAnalise, CreditCardAnaliseLogs
 from .ext import CreditCardAlreadyExists, CreditCardNotFound, AnaliseCreditCardNotFound, AnaliseCooldown, AnaliseApproved, AnalisePending
-import random
+
 
 class CreditCardRepository:
 
@@ -29,8 +32,10 @@ class CreditCardRepository:
 
     def get_credit_card_by_username(self, username):
         credit_card = database.credit_cards.find_one({'username': username})
+
         if not credit_card:
             raise CreditCardNotFound('CreditCard not found')
+        credit_card.pop('_id', None)
         return credit_card
 
     def delete(self, username):
@@ -48,6 +53,10 @@ class CreditCardRepository:
         return True
 
 class AnaliseCreditCardRepository:
+
+    def __init__(self):
+        self.rabbitmq_producer = RabbitMQProducer()
+
     def create(self, username):
         card_user = CreditCardRepository().get_credit_card_by_username(username)
 
@@ -58,17 +67,20 @@ class AnaliseCreditCardRepository:
             if status == 'negado':
                 data_request = analise_credit_card_verify['data_request']
                 if data_request + 600 < datetime.now().timestamp():
-                    # TODO - fazer a analise de credito
-                    print('fazer a analise de credito')
+                    print('fazer a analise de credito1')
+                    body = {
+                        "card_number": card_user["number"],
+                        "username": username,
+                    }
                     database.credit_card_analise.update_one({'username': username}, {'$set': {'status': 'pendente', 'data_request': datetime.now().timestamp()}})
+                    self.rabbitmq_producer.publish_message(body)
                     return analise_credit_card_verify
                 else:
-                    raise AnaliseCooldown('AnaliseCooldown2')
+                    raise AnaliseCooldown('AnaliseCooldown')
             elif status == 'aprovado':
                 raise AnaliseApproved('AnaliseApproved')
             else:
                 raise AnalisePending('AnalisePending')
-        # TODO - fazer a analise de credito
         print('fazer a analise de credito')
 
         analise_credit_card = CreditCardAnalise(
@@ -76,7 +88,15 @@ class AnaliseCreditCardRepository:
             card_number=card_user['number'],
         )
 
-        database.credit_card_analise.insert_one(analise_credit_card.model_dump())
+        body = {
+            "card_number": card_user["number"],
+            "username": username,
+        }
+        try:
+            self.rabbitmq_producer.publish_message(body)
+            database.credit_card_analise.insert_one(analise_credit_card.model_dump())
+        except Exception as e:
+            print(e)
         return analise_credit_card
 
     def get_analise_by_username(self, username):

@@ -11,6 +11,14 @@ class GeneralConfig:
     API_PORT: str = os.getenv('API_PORT')
     API_HOST: str = os.getenv('API_HOST')
 
+    # rabbitmq enviroments
+    RABBITMQ_USER: str = os.getenv('RABBITMQ_USER')
+    RABBITMQ_PASS: str = os.getenv('RABBITMQ_PASS')
+    RABBITMQ_HOST: str = os.getenv('RABBITMQ_HOST')
+    RABBITMQ_PORT: str = os.getenv('RABBITMQ_PORT')
+    RABBITMQ_SUBSCRIBE_QUEUE: str = os.getenv('RABBITMQ_SUBSCRIBE_QUEUE')
+    RABBITMQ_PUBLISH_QUEUE: str = os.getenv('RABBITMQ_PUBLISH_QUEUE')
+
     # authentication security enviroments
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
     JWT_REFRESH_SECRET_KEY = os.getenv('JWT_REFRESH_SECRET_KEY')

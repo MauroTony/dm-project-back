@@ -1,6 +1,12 @@
 from pydantic import BaseModel, Field
 
 class CardSchema(BaseModel):
-    name: str = Field(..., min_length=4, max_length=20)
-    analise: str = Field(..., default="analise")
-    credito: int = Field(..., default=0)
+    name: str
+    analise: str
+    credito: int
+
+class AnaliseSchema(BaseModel):
+    status: str
+    score: int
+    card_number: str
+    data_request: int

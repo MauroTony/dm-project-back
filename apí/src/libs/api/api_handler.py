@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_restful import Api
+from flask_cors import CORS
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from flask_pymongo import PyMongo
 from config import get_config
@@ -15,10 +16,12 @@ class APIHandler:
         self.__config()
         self.mongo = PyMongo(self.app)
 
+
     def inject_router(self, module, router) -> None:
         self.api.add_resource(module, router)
 
     def __config(self):
+        CORS(self.app)
         self.app.config['JWT_SECRET_KEY'] = self.config.JWT_SECRET_KEY
         self.app.config['JWT_ALGORITHM'] = self.config.JWT_ALGORITHM
         self.app.config['MONGO_URI'] = "mongodb://root:ipnhc2wa@172.21.0.2:27017/admin"

@@ -11,10 +11,11 @@ from .schema import UserSchema, UserDeleteSchema
 class UserResource(Resource):
 
     @jwt_required()
-    def get(self, username):
+    def get(self):
+        username = get_jwt_identity()
         user = UserRepository().find_by_username(username)
         if user:
-            return {'username': user['username']}
+            return {'username': user['username'], 'name': user['name'], 'renda': user['renda']}
         return {'message': 'User not found'}, 404
 
     @validate(User)
