@@ -1,7 +1,10 @@
 # Desafio Tecnico
 Projeto que simula um sistema de solicitação de credito.
-O sistema foi dividido em 3 sistemas, Api, Front em FLutter e Microsserviço para se comunicar com a Api
+
+O sistema foi dividido em 3 partes, Api, Front em FLutter e Microsserviço para se comunicar com a Api
+
 O projeto consta com mais funcionalidades que o desafio tecnico solicita com a intenção de demonstrar mais habilidades tecnicas.
+
 Para o projeto foram utilizado:
 - Principios de DDD
 - Principios de SOLID
