@@ -1,0 +1,69 @@
+version: '3.9'
+services:
+  dm_api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    command: sh entrypoint.sh
+    env_file:
+      - .env
+    networks:
+      - dm_network
+  mongodb:
+    image: mongo
+    restart: always
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${DB_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${DB_PASSWORD}
+      MONGO_INITDB_DATABASE: ${DB_DATABASE}
+    volumes:
+      - dbmongo:/data/db
+    networks:
+      - dm_network
+  dm_score:
+    build:
+      context: ./score-calculation
+      dockerfile: Dockerfile
+    command: sh entrypoint.sh
+    env_file:
+      - .env
+    networks:
+      - dm_network
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: 'rabbitmq'
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+      RABBITMQ_PORT: ${RABBITMQ_PORT}
+      RABBITMQ_HOST: ${RABBITMQ_HOST}
+    ports:
+      - ${RABBITMQ_PORT}:5672
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - dm_network
+  flutter-web:
+    build:
+      context: ./dm-flutter
+      dockerfile: Dockerfile
+    ports:
+      - 8080:80
+    env_file:
+      - .env
+    networks:
+      - dm_network
+
+networks:
+  dm_network:
+    external: true
+
+volumes:
+  dbmongo:
+  rabbitmq-data:

@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from datetime import datetime
 
 class CreditCard(BaseModel):
-    name: str = Field(..., min_length=4, max_length=20)
+    name: str = Field(..., min_length=3)
     number: str = Field(..., min_length=8)
     username: str = Field(..., min_length=3)
     credito: int = Field(default=0)
