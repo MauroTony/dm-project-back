@@ -24,7 +24,7 @@ class APIHandler:
         CORS(self.app)
         self.app.config['JWT_SECRET_KEY'] = self.config.JWT_SECRET_KEY
         self.app.config['JWT_ALGORITHM'] = self.config.JWT_ALGORITHM
-        self.app.config['MONGO_URI'] = "mongodb://root:ipnhc2wa@172.21.0.2:27017/admin"
+        self.app.config['MONGO_URI'] = f"mongodb://{self.config.DB_USER}:{self.config.DB_PASSWORD}@{self.config.DB_HOST}:{self.config.DB_PORT}/{self.config.DB_DATABASE}"
         #self.app.config['MONGO_URI'] = f'mongodb://{self.config.DB_USER}:{self.config.DB_PASSWORD}@{self.config.DB_HOST}:{self.config.API_PORT}/{self.config.DB_DATABASE}'
 
         @self.jwt.token_in_blocklist_loader

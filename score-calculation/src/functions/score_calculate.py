@@ -14,7 +14,7 @@ class ScoreCalculate:
         self.card = card
         self.score = None
     def __config(self):
-        self.MONGO_URI = "mongodb://root:ipnhc2wa@172.21.0.2:27017"
+        self.MONGO_URI = f"mongodb://{self.config.DB_USER}:{self.config.DB_PASSWORD}@{self.config.DB_HOST}:{self.config.DB_PORT}"
     def score_calculate(self):
         self.score = random.randint(1, 999)
         sleep(5)
