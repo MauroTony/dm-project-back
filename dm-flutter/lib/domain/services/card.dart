@@ -7,7 +7,7 @@ class ApiServiceCard {
   static Future<Map<String, dynamic>> getCardData() async {
     String? apiUrl = dotenv.env["API_URL"];
     String? token = getToken();
-    final response = await http.get(Uri.parse("${apiUrl!}/credit-card"),
+    final response = await http.get(Uri.parse("http://127.0.0.1:5000/credit-card"),
         headers: {
           'Authorization': 'Bearer $token'
         }
@@ -32,7 +32,7 @@ class ApiServiceCard {
   static Future<int> createCardData() async {
     String? apiUrl = dotenv.env["API_URL"];
     String? token = getToken();
-    final response = await http.post(Uri.parse("${apiUrl!}/credit-card"),
+    final response = await http.post(Uri.parse("http://127.0.0.1:5000/credit-card"),
         headers: {
           'Authorization': 'Bearer $token'
         }
@@ -53,7 +53,7 @@ class ApiServiceCard {
   static Future<int> deleteCard() async {
     String? apiUrl = dotenv.env["API_URL"];
     String? token = getToken();
-    final response = await http.delete(Uri.parse("${apiUrl!}/credit-card"),
+    final response = await http.delete(Uri.parse("http://127.0.0.1:5000/credit-card"),
         headers: {
           'Authorization': 'Bearer $token'
         }
