@@ -34,6 +34,26 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Home'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              Navigator.pushNamed(context, '/user');
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.credit_card),
+            onPressed: () {
+              Navigator.pushNamed(context, '/card');
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.analytics),
+            onPressed: () {
+              Navigator.pushNamed(context, '/analysis');
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Text('Welcome!'),
