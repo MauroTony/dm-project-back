@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dmproject/domain/services/login.dart';
 import 'package:dmproject/domain/services/user.dart';
 
 class UserScreen extends StatefulWidget {
@@ -28,6 +29,34 @@ class _UserScreenState extends State<UserScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('User Screen'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              Navigator.pushNamed(context, '/user');
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.credit_card),
+            onPressed: () {
+              Navigator.pushNamed(context, '/card');
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.analytics),
+            onPressed: () {
+              Navigator.pushNamed(context, '/analysis');
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              ApiServiceAuth.logout().then((data) {
+                Navigator.pushReplacementNamed(context, '/');
+              });
+            },
+          ),
+        ],
       ),
       body: userData != null
           ? Center(

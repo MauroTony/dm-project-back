@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:dmproject/domain/services/card.dart';
 import 'package:dmproject/domain/services/analise.dart';
+import 'package:dmproject/domain/services/login.dart';
 
 class ScreenCard extends StatefulWidget {
   @override
@@ -77,7 +78,35 @@ class _ScreenCardState extends State<ScreenCard> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Credit Card'),
+        title: Text('User Screen'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {
+              Navigator.pushNamed(context, '/user');
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.credit_card),
+            onPressed: () {
+              Navigator.pushNamed(context, '/card');
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.analytics),
+            onPressed: () {
+              Navigator.pushNamed(context, '/analysis');
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.logout),
+            onPressed: () {
+              ApiServiceAuth.logout().then((data) {
+                Navigator.pushReplacementNamed(context, '/');
+              });
+            },
+          ),
+        ],
       ),
       body: CardNotFound != 404
           ? Center(

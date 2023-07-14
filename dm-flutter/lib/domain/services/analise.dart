@@ -81,7 +81,7 @@ class ApiServiceAnalise {
           'Authorization': 'Bearer $token'
         }
     );
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       return 200;
     } else if(response.statusCode == 400) {
       return 400;

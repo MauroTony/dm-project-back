@@ -14,8 +14,8 @@ class _LoginScreenState extends State<LoginScreen> {
     String username = _usernameController.text;
     String password = _passwordController.text;
     try {
-      await ApiService.login(username, password);
-      Navigator.pushReplacementNamed(context, '/user');
+      await ApiServiceAuth.login(username, password);
+      Navigator.pushReplacementNamed(context, '/card');
     } catch (e) {
       showDialog(
         context: context,
