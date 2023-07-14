@@ -7,7 +7,7 @@ class ApiServiceAnalise {
   static Future<Map<String, dynamic>> getAnalise() async {
     String? apiUrl = dotenv.env["API_URL"];
     String? token = getToken();
-    final response = await http.get(Uri.parse("http://127.0.0.1:5000/analise"),
+    final response = await http.get(Uri.parse("${apiUrl}/analise"),
         headers: {
           'Authorization': 'Bearer $token'
         }
@@ -32,7 +32,7 @@ class ApiServiceAnalise {
   static Future<List<dynamic>> getAnaliseLogs() async {
     String? apiUrl = dotenv.env["API_URL"];
     String? token = getToken();
-    final response = await http.get(Uri.parse("http://127.0.0.1:5000/analise-list"),
+    final response = await http.get(Uri.parse("${apiUrl}/analise-list"),
         headers: {
           'Authorization': 'Bearer $token'
         }
@@ -53,7 +53,7 @@ class ApiServiceAnalise {
   static Future<int> createAnalise() async {
     String? apiUrl = dotenv.env["API_URL"];
     String? token = getToken();
-    final response = await http.post(Uri.parse("http://127.0.0.1:5000/analise"),
+    final response = await http.post(Uri.parse("${apiUrl}/analise"),
         headers: {
           'Authorization': 'Bearer $token'
         }
@@ -76,7 +76,7 @@ class ApiServiceAnalise {
   static Future<int> deleteAnalise() async {
     String? apiUrl = dotenv.env["API_URL"];
     String? token = getToken();
-    final response = await http.delete(Uri.parse("http://127.0.0.1:5000/analise"),
+    final response = await http.delete(Uri.parse("${apiUrl}/analise"),
         headers: {
           'Authorization': 'Bearer $token'
         }

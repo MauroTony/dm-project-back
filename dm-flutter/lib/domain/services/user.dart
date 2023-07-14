@@ -14,7 +14,7 @@ class ApiService {
       'renda': income,
     };
     try {
-      final response = await http.post(Uri.parse("http://127.0.0.1:5000/user"), body: jsonEncode(requestBody), headers: {'Content-Type': 'application/json'});
+      final response = await http.post(Uri.parse("${apiUrl}/user"), body: jsonEncode(requestBody), headers: {'Content-Type': 'application/json'});
       if (response.statusCode == 201) {
         return true;
       } else {
@@ -30,7 +30,7 @@ class ApiService {
     String? apiUrl = dotenv.env["API_URL"];
     String? token = getToken();
     try {
-      final response = await http.get(Uri.parse("http://127.0.0.1:5000/user"),
+      final response = await http.get(Uri.parse("${apiUrl}/user"),
           headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer $token'

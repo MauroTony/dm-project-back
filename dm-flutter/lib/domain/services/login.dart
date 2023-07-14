@@ -13,7 +13,7 @@ class ApiService {
     'password': password,
     };
 
-    var response = await http.post(Uri.parse("http://127.0.0.1:5000/login"), body: jsonEncode(requestBody), headers: {'Content-Type': 'application/json'});
+    var response = await http.post(Uri.parse("${apiUrl}/login"), body: jsonEncode(requestBody), headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       var data = json.decode(response.body);
       String token = data['token'];
