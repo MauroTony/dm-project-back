@@ -16,7 +16,6 @@ Para o projeto foram utilizado:
 O Projeto também consta com:
 - Deploy na AWS
 - Pipeline de Deploy na AWS
-- Cobertura de Testes para API
 - Documentação dos Endpoints
   
 Features:
@@ -51,7 +50,8 @@ Sua representação visual que ajuda a entender a estrutura e o fluxo do projeto
 [Mapa Mental](https://github.com/MauroTony/dm-project-back/assets/57079165/deb3fc7a-86c8-4f7a-9ac9-beb1a445764e)
 
 ## Production Link 
-- [Project  Link](http://35.171.26.111:8080)
+- Aqui você encontra o link em produção: [Project  Link](http://35.171.26.111:8080)
+- link da api: [Api Link](http://35.171.26.111:5000)
 
 ## Documentação
 A documentação da API pode ser encontra nesse [link](https://documenter.getpostman.com/view/14325061/2s946eAtR5)
