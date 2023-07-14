@@ -1,16 +1,17 @@
 version: '3.9'
 services:
-  dm_api:
+  dm-api:
     build:
       context: ./api
       dockerfile: Dockerfile
     ports:
-      - 8000:8000
+      - 5000:5000
     command: sh entrypoint.sh
     env_file:
       - .env
     networks:
-      - dm_network
+      dm_network:
+        ipv4_address: 172.19.0.7
   mongodb:
     image: mongo
     restart: always
@@ -23,7 +24,8 @@ services:
     volumes:
       - dbmongo:/data/db
     networks:
-      - dm_network
+      dm_network:
+        ipv4_address: 172.19.0.6
   dm_score:
     build:
       context: ./score-calculation
@@ -32,7 +34,8 @@ services:
     env_file:
       - .env
     networks:
-      - dm_network
+      dm_network:
+        ipv4_address: 172.19.0.5
   rabbitmq:
     image: rabbitmq:3-management
     container_name: 'rabbitmq'
@@ -48,7 +51,8 @@ services:
     volumes:
       - rabbitmq-data:/var/lib/rabbitmq
     networks:
-      - dm_network
+      dm_network:
+        ipv4_address: 172.19.0.4
   flutter-web:
     build:
       context: ./dm-flutter
@@ -58,12 +62,18 @@ services:
     env_file:
       - .env
     networks:
-      - dm_network
+      dm_network:
+        ipv4_address: 172.19.0.3
+    depends_on:
+      - dm-api
 
 networks:
   dm_network:
-    external: true
-
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.19.0.0/24
+          gateway: 172.19.0.1
 volumes:
   dbmongo:
   rabbitmq-data:
