@@ -97,7 +97,7 @@ class AnaliseCreditCardRepository:
             database.credit_card_analise.insert_one(analise_credit_card.model_dump())
         except Exception as e:
             print(e)
-        return analise_credit_card
+        return analise_credit_card.model_dump()
 
     def get_analise_by_username(self, username):
         card_user = CreditCardRepository().get_credit_card_by_username(username)

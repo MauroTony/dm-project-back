@@ -69,7 +69,7 @@ class AnaliseResource(Resource):
         except CreditCardNotFound:
             return {'message': 'Credit Card not found'}, 404
 
-        return credit_card.model_dump(), 201
+        return credit_card, 201
 
     @jwt_required()
     def delete(self):
