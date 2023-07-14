@@ -20,4 +20,4 @@ jobs:
         run: sudo apt-get install -y ssh
       - name: Deploy via SSH
         run: |
-          ssh -i "dm.pem" ubuntu@ec2-35-171-26-111.compute-1.amazonaws.com "sh deploy.sh"
+          ssh ubuntu@ec2-35-171-26-111.compute-1.amazonaws.com "sh deploy.sh"
